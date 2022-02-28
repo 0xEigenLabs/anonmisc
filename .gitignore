@@ -5,3 +5,4 @@ cache
 artifacts
 typechain
 circuit/leaf_existence_js
+.env
