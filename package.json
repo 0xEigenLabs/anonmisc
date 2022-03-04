@@ -1,7 +1,7 @@
 {
-  "name": "PerdersenCommitment",
+  "name": "@ieigen/pedersencommitment",
   "version": "0.0.1",
-  "description": "Eigen dNFT Protocol",
+  "description": "Eigen Pedersen Commitment Library",
   "main": "index.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint src --ext .ts",
