@@ -10,7 +10,8 @@ const {
  * Interface for generation and verify the anonymous address
  */
 export interface AnonymousAddress {
-    Publickey(receiverPublicKeyHex: string, message: Buffer, nonce: number, senderPrivateKeyHex: string): string
+    PublicKey(receiverPublicKeyHex: string, message: Buffer, nonce: number, senderPrivateKeyHex: string): string
+    PrivateKey(receiverPrivateKeyHex: string, message: Buffer, nonce: number, senderPublicKeyHex: string): any;
     Verify(pubkey: string, receivePrivateKeyHex: string, message: Buffer, nonce: number, senderPublicKeyHex: string): boolean
     PublickeyToAddress(pubkeyHex: string): string;
 }
@@ -20,7 +21,10 @@ export interface AnonymousAddress {
  */
 export class DKSAP implements AnonymousAddress {
 
-    Publickey(receiverPublicKeyHex: string, message: Buffer, nonce: number, senderPrivateKeyHex: string): string {
+    /**
+     * called by sender
+     */
+    PublicKey(receiverPublicKeyHex: string, message: Buffer, nonce: number, senderPrivateKeyHex: string): string {
         var receiverPublicKey = ec.keyFromPublic(receiverPublicKeyHex, 'hex');
         let senderPrivateKey = ec.keyFromPrivate(senderPrivateKeyHex, "hex")
         var shared1 = senderPrivateKey.derive(receiverPublicKey.getPublic());
@@ -32,7 +36,25 @@ export class DKSAP implements AnonymousAddress {
         return receiverPublicKey.getPublic().add(tmpKey.getPublic()).encode("hex")
     }
 
+    /**
+     * call by receiver
+     */
+    PrivateKey(receiverPrivateKeyHex: string, message: Buffer, nonce: number, senderPublicKeyHex: string): any {
+        var senderPublicKey = ec.keyFromPublic(senderPublicKeyHex, 'hex');
+        let receiverPrivateKey = ec.keyFromPrivate(receiverPrivateKeyHex, "hex")
+        var shared1 = receiverPrivateKey.derive(senderPublicKey.getPublic());
+        var shareHash = crypto.createHash('sha256').update(shared1.toString("hex")).digest('hex');
+        var txHash = crypto.createHash('sha256').update(message.toString("hex")).digest('hex');
+        let finalMessage = shareHash.concat(txHash).concat(nonce.toString());
+        var finalHash = crypto.createHash('sha256').update(finalMessage).digest('hex');
+        console.log(receiverPrivateKeyHex, "||", finalHash)
+        let newSK = new BN(receiverPrivateKeyHex, 16).add(new BN(finalHash, 16))
+        return ec.keyFromPrivate(newSK)
+    }
 
+    /**
+     * call by receiver
+     */
     Verify(pubkey: string, receiverPrivateKeyHex: string, message: Buffer, nonce: number, senderPublicKeyHex: string): boolean {
         var senderPublicKey = ec.keyFromPublic(senderPublicKeyHex, 'hex');
         let receiverPrivateKey = ec.keyFromPrivate(receiverPrivateKeyHex, "hex")

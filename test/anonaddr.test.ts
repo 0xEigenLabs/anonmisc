@@ -15,8 +15,11 @@ const main = () => {
 
     let bsap = new DKSAP();
 
-    let pubkey = bsap.Publickey(pubB, Buffer.from("12112"), 0, keyA.getPrivate().toString("hex"))
+    let newSK = bsap.PrivateKey(keyB.getPrivate().toString("hex"), Buffer.from("12112"), 0, pubA)
+    console.log(newSK.getPublic().encode("hex"))
+    let pubkey = bsap.PublicKey(pubB, Buffer.from("12112"), 0, keyA.getPrivate().toString("hex"))
     console.log(pubkey)
+    expect(newSK.getPublic().encode("hex")).to.eq(pubkey)
 
     expect(bsap.Verify(pubkey, keyB.getPrivate().toString("hex"), Buffer.from("12112"), 0, pubA)).to.eq(true)
     expect(bsap.Verify(pubkey, keyB.getPrivate().toString("hex"), Buffer.from("12112"), 1, pubA)).to.eq(false)
