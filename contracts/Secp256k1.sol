@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "./EllipticCurve.sol";
 
-contract Secp256k1 is EllipticCurve{
+contract Secp256k1 is EllipticCurve {
     uint256 public pp = uint256(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F);
     uint256 public nn = uint256(0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141);
     uint256 public gx = uint256(0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798);
