@@ -2,6 +2,9 @@ var EC = require('elliptic').ec;
 var ec = new EC('secp256k1');
 var BN = require('bn.js');
 import * as crypto from 'crypto';
+const {
+    utils
+} = require("ethers");
 
 /**
  * Interface for generation and verify the anonymous address
@@ -9,6 +12,7 @@ import * as crypto from 'crypto';
 export interface AnonymousAddress {
     Publickey(receiverPublicKeyHex: string, message: Buffer, nonce: number, senderPrivateKeyHex: string): string
     Verify(pubkey: string, receivePrivateKeyHex: string, message: Buffer, nonce: number, senderPublicKeyHex: string): boolean
+    PublickeyToAddress(pubkeyHex: string): string;
 }
 
 /**
@@ -40,6 +44,14 @@ export class DKSAP implements AnonymousAddress {
         let tmpKey = ec.keyFromPrivate(finalHash, "hex")
         let vPubkey = receiverPrivateKey.getPublic().add(tmpKey.getPublic()).encode("hex")
         return vPubkey == pubkey;
+    }
+
+    PublickeyToAddress(pubkeyHex: string): string {
+        if (pubkeyHex.slice(0,2) != "0x") {
+            pubkeyHex = "0x" + pubkeyHex;
+        }
+        let address = utils.computeAddress(pubkeyHex)
+        return address;
     }
 }
 
