@@ -1,4 +1,6 @@
 # Pedersen Commitment
-Pedersen commitment in JS and Solidity
+* Pedersen commitment in JS and Solidity
+* Anonymous address
 
-Inspired by https://github.com/witnet/elliptic-curve-solidity/
+## Reference
+[1] EC operations https://github.com/witnet/elliptic-curve-solidity/
