@@ -1,7 +1,7 @@
 {
-  "name": "@ieigen/pedersencommitment",
-  "version": "0.0.6",
-  "description": "Eigen Pedersen Commitment Library",
+  "name": "@ieigen/anonmisc",
+  "version": "0.0.1",
+  "description": "Eigen Anonymous Misc Library",
   "keywords": [
     "Commitment",
     "Pedersencommitment",
