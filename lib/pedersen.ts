@@ -69,7 +69,6 @@ function generateH() {
     return ec.g.mul(generateRandom());
 }
 
-
 module.exports = {
     commitTo,
     add,

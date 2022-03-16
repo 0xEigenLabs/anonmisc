@@ -15,7 +15,7 @@ describe('pedersen', () => {
 
     it('should commit to a sum of two values', () => {
 
-        //transfer amount - we want to transfer 5 tokens
+        //transfer amount - we want to transfer 5 tokens    
         var tC = pedersen.commitTo(H, r[1], 5);
 
         // Alice 10 - 5 = 5
