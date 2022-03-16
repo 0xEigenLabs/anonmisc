@@ -16,7 +16,7 @@ contract PedersenCommitment is Secp256k1 {
     }
 
     function setH ( )
-        internal
+        external
         isHSet
     {
         uint256 TH = uint256( keccak256(abi.encodePacked(block.timestamp, msg.sender)));
@@ -43,7 +43,8 @@ contract PedersenCommitment is Secp256k1 {
         view
         returns( uint256 _v3 )
     {
-        uint256 _p = pp;
+        //uint256 _p = pp;
+        uint256 _p = nn;
         assembly{
             if lt( _v1 , _v2 ){
                 _v3 := sub( _p , sub( _v2 , _v1 ) )
@@ -65,12 +66,33 @@ contract PedersenCommitment is Secp256k1 {
         ( _x3 , _y3 ) = eAdd( _x1 , _y1 , _x2 , _y2 );
     }
 
+    function commitWithH( uint256 _r , uint256 _v , uint256 _hx , uint256 _hy)
+        public
+        view
+        returns ( uint256 _x3 , uint256 _y3 )
+    {
+        ( uint256 _x1 , uint256  _y1 ) = eMul( _r , gx , gy );
+        ( uint256 _x2 , uint256 _y2 ) = eMul( _v , _hx , _hy );
+        ( _x3 , _y3 ) = eAdd( _x1 , _y1 , _x2 , _y2 );
+    }
+
     function verify( uint256 _r , uint256 _v , uint256 _x1 , uint256 _y1 )
         public
         view
         returns ( bool result )
     {
         ( uint256 _x2 , uint256 _y2 ) = commit( _r , _v );
+        if ( (_x1 == _x2) && ( _y1 == _y2 ) ){
+            result = true;
+        }
+    }
+
+    function verifyWithH( uint256 _r , uint256 _v , uint256 _x1 , uint256 _y1 , uint256 _hx , uint256 _hy)
+        public
+        view
+        returns ( bool result )
+    {
+        ( uint256 _x2 , uint256 _y2 ) = commitWithH( _r , _v , _hx , _hy);
         if ( (_x1 == _x2) && ( _y1 == _y2 ) ){
             result = true;
         }
