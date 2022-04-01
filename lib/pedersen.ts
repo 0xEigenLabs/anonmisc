@@ -1,13 +1,30 @@
-var EC = require('elliptic').ec;
-var ec = new EC('secp256k1');
-var BN = require('bn.js');
 import * as crypto from 'crypto';
+
+const secp256k1 = require('@noble/secp256k1')
+const CURVE = secp256k1.CURVE
+const Point = secp256k1.Point
+
+var G = new Point(CURVE.Gx, CURVE.Gy)
+
+function generateRandom() {
+    let random;
+    do {
+        random = BigInt("0x" + crypto.randomBytes(32).toString('hex'));
+    } while (random >= CURVE.n); // make sure it's in the safe range
+    return random;
+}
+
+function generateH() {
+    return G.multiply(generateRandom());
+}
+
+var H = generateH()
 
 // commit to a Value X
 //   r - private Key used as blinding factor
 //   H - shared private? point on the curve
 function commitTo(H, r, x) {
-    return ec.g.mul(r).add(H.mul(x));
+    return G.multiply(r % CURVE.n).add(H.multiply(x));
 }
 
 // sum two commitments using homomorphic encryption
@@ -19,7 +36,7 @@ function add(Cx, Cy) {
 // subtract two commitments using homomorphic encryption
 //
 function sub(Cx, Cy) {
-    return Cx.add(Cy.neg());
+    return Cx.add(Cy.negate());
 }
 
 // add two known values with blinding factors
@@ -28,8 +45,8 @@ function sub(Cx, Cy) {
 //   add vX + vY (hidden values)
 function addCommitment(H, rX, rY, vX, vY) {
     // umod to wrap around if negative
-    var rZ = rX.add(rY).umod(ec.n);
-    return ec.g.mul(rZ).add(H.mul(vX + vY));
+    var rZ = (rX + rY) % CURVE.n;
+    return G.multiply(rZ).add(H.multiply((vX + vY) % CURVE.n));
 }
 
 // subtract two known values with blinding factors
@@ -37,9 +54,14 @@ function addCommitment(H, rX, rY, vX, vY) {
 //   add rX - rY (blinding factor private keys)
 //   add vX - vY (hidden values)
 function subCommitment(H, rX, rY, vX, vY) {
-    // umod to wrap around if negative
-    var rZ = rX.sub(rY).umod(ec.n);
-    return ec.g.mul(rZ).add(H.mul(vX - vY));
+    var rZ;
+    if (rX > rY) {
+        rZ = (rX - rY) % CURVE.n;
+    } else {
+        rZ = (rX - rY) + CURVE.n;
+    }
+    
+    return G.multiply(rZ).add(H.multiply((vX - vY) % CURVE.n));
 }
 
 /**
@@ -51,22 +73,7 @@ function subCommitment(H, rX, rY, vX, vY) {
  * @param {*} v - original value committed to
  */
 function verify(H, C, r, v) {
-    return ec.g.mul(r).add(H.mul(v)).eq(C);
-}
-
-/**
- * generate a random number for my curve
- */
-function generateRandom() {
-    let random;
-    do {
-        random = new BN(crypto.randomBytes(32));
-    } while (random.gte(ec.n)); // make sure it's in the safe range
-    return random;
-}
-
-function generateH() {
-    return ec.g.mul(generateRandom());
+    return G.multiply(r % CURVE.n).add(H.multiply(v)).equals(C);
 }
 
 module.exports = {

@@ -581,6 +581,11 @@
     "tweetnacl" "^1.0.3"
     "tweetnacl-util" "^0.15.1"
 
+"@noble/secp256k1@^1.5.5":
+  "integrity" "sha512-sZ1W6gQzYnu45wPrWx8D3kwI2/U29VYTx9OjbDAd7jwRItJ0cSTMPRL/C8AWZFn9kWFLQGqEXVEE86w4Z8LpIQ=="
+  "resolved" "https://registry.npmjs.org/@noble/secp256k1/-/secp256k1-1.5.5.tgz"
+  "version" "1.5.5"
+
 "@nodelib/fs.scandir@2.1.5":
   "integrity" "sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g=="
   "resolved" "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
