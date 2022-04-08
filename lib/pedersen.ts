@@ -15,7 +15,7 @@ async function generateRandom() {
 async function generateH() {
     babyjub = await buildBabyjub(); 
     G = babyjub.Generator
-    return babyjub.mulPointEscalar(G, generateRandom())
+    return babyjub.mulPointEscalar(G, await generateRandom())
 }
 
 var H = generateH()
@@ -26,23 +26,23 @@ var H = generateH()
 async function commitTo(H, r, x) {
     babyjub = await buildBabyjub(); 
     G = babyjub.Generator
-    console.log(typeof r)
-    console.log(typeof babyjub.order)
     return babyjub.addPoint(babyjub.mulPointEscalar(G, r % babyjub.order), babyjub.mulPointEscalar(H, x))
 }
 
 // sum two commitments using homomorphic encryption
-//
 async function add(Cx, Cy) {
     babyjub = await buildBabyjub(); 
     return babyjub.addPoint(Cx, Cy);
 }
 
 // subtract two commitments using homomorphic encryption
-//
 async function sub(Cx, Cy) {
     babyjub = await buildBabyjub(); 
-    return babyjub.addPoint(Cx, -Cy);
+    let Cy_neg = [
+        babyjub.F.neg(Cy[0]),
+        Cy[1]
+    ]
+    return babyjub.addPoint(Cx, Cy_neg);
 }
 
 // add two known values with blinding factors
