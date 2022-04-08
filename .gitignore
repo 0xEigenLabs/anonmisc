@@ -6,3 +6,6 @@ artifacts
 typechain
 circuit/leaf_existence_js
 .env
+yarn.lock
+package-lock.json
+dist
