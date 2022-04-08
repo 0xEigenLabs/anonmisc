@@ -1,6 +1,6 @@
 # Pedersen Commitment
 
-* Pedersen commitment in JS and Solidity
+* Pedersen commitment in JS and Solidity, support Secp256k1, Baby JubJub
 * Anonymous address by extended ECDH
 
 ## Reference

@@ -13,18 +13,18 @@ async function generateRandom() {
 }
 
 async function generateH() {
-    babyjub = await buildBabyjub(); 
+    babyjub = await buildBabyjub();
     G = babyjub.Generator
     return babyjub.mulPointEscalar(G, await generateRandom())
 }
 
-var H = generateH()
+// var H = generateH()
 
 // commit to a Value X
 //   r - private Key used as blinding factor
 //   H - shared private? point on the curve
 async function commitTo(H, r, x) {
-    babyjub = await buildBabyjub(); 
+    babyjub = await buildBabyjub();
     G = babyjub.Generator
     return babyjub.addPoint(babyjub.mulPointEscalar(G, r % babyjub.order), babyjub.mulPointEscalar(H, x))
 }

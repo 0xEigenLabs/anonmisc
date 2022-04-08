@@ -13,6 +13,6 @@ describe("Init test", () => {
         await contract.deployed()
     })
     it("test 1", async() => {
-        //TODO refers to test/pedersen.test.ts
+        //TODO add test of secp256k1 @czl
     })
 })
