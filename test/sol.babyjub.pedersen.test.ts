@@ -102,6 +102,16 @@ describe("Init test", () => {
         var checkAC2 = await pedersen.subCommitment(H, r2, r1, 10n, 5n);
         expect(babyjub.F.eq(aC2[0], checkAC2[0])).to.eq(true);
         expect(babyjub.F.eq(aC2[1], checkAC2[1])).to.eq(true);
+        console.log("ac2[0]", babyjub.F.toString(checkAC2[0]))
+        console.log(BigNumber.from(checkAC2[0]))
+        console.log("ac2[1]", babyjub.F.toString(checkAC2[1]))
+        console.log(BigNumber.from(checkAC2[1]))
+
+        let solaC2 = await contract.subCommitment(r2, babyjub.F.toString(aC1[0]), babyjub.F.toString(aC1[1]), r1, babyjub.F.toString(tC[0]), babyjub.F.toString(tC[1]))
+        console.log("solaC2[1]", solaC2[1])
+        console.log("solaC2[2]", solaC2[2])
+        expect(babyjub.F.toString(checkAC2[0])).to.eq(solaC2[1]);
+        expect(babyjub.F.toString(checkAC2[1])).to.eq(solaC2[2]);
 
         // bob's balance to go up by 5
         // bC1 + tC = bC2

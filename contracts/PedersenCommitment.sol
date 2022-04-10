@@ -43,8 +43,8 @@ contract PedersenCommitment is Secp256k1 {
         view
         returns( uint256 _v3 )
     {
-        //uint256 _p = pp;
-        uint256 _p = nn;
+        uint256 _p = pp;
+        //uint256 _p = nn;
         assembly{
             if lt( _v1 , _v2 ){
                 _v3 := sub( _p , sub( _v2 , _v1 ) )

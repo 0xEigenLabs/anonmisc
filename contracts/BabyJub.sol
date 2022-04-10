@@ -138,7 +138,7 @@ contract BabyJub {
      * @return p = -(_p)
      */
     function afNeg(uint256[2] memory _p) internal pure returns (uint256[2] memory p) {
-        return [Q-_p[0], _p[1]];
+        return [Q-_p[0]%Q, _p[1]];
     }
 
     /**
