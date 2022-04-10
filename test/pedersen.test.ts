@@ -5,7 +5,7 @@ var pedersen = require('../lib/pedersen');
 let babyjub
 let H
 
-describe.only('pedersen babyjub', () => {
+describe('pedersen babyjub', () => {
     before(async () => {
         babyjub = await buildBabyjub();
         H = await pedersen.generateH();
