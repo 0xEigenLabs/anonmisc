@@ -1,5 +1,7 @@
-import * as crypto from 'crypto'
-import { buildBabyjub } from 'circomlibjs';
+var cryptolib = require('crypto')
+//import * as crypto from 'crypto'
+//let buildBabyjub = require('circomlibjs')
+import {buildBabyjub} from 'circomlibjs'
 let babyjub
 let G
 
@@ -7,7 +9,7 @@ async function generateRandom() {
     babyjub = await buildBabyjub(); 
     let random;
     do {
-        random = BigInt("0x" + crypto.randomBytes(32).toString('hex'));
+        random = BigInt("0x" + cryptolib.randomBytes(32).toString('hex'));
     } while (random >= babyjub.order); // make sure it's in the safe range
     return random;
 }

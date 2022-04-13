@@ -92,26 +92,20 @@ describe("Init test", () => {
         var aC1 = await pedersen.commitTo(H, r2, 10n);
         var aC2 = await pedersen.sub(aC1, tC);
 
-        // bob 7 + 5 (aC2) = 12
-        let r4 = await pedersen.generateRandom();
-        var bC1 = await pedersen.commitTo(H, r4, 7n);
-        var bC2 = await pedersen.add(bC1, tC);
-
         // alice's balance to go down by 5
         // aC1 - tC = aC2
         var checkAC2 = await pedersen.subCommitment(H, r2, r1, 10n, 5n);
         expect(babyjub.F.eq(aC2[0], checkAC2[0])).to.eq(true);
         expect(babyjub.F.eq(aC2[1], checkAC2[1])).to.eq(true);
-        console.log("ac2[0]", babyjub.F.toString(checkAC2[0]))
-        console.log(BigNumber.from(checkAC2[0]))
-        console.log("ac2[1]", babyjub.F.toString(checkAC2[1]))
-        console.log(BigNumber.from(checkAC2[1]))
 
-        let solaC2 = await contract.subCommitment(r2, babyjub.F.toString(aC1[0]), babyjub.F.toString(aC1[1]), r1, babyjub.F.toString(tC[0]), babyjub.F.toString(tC[1]))
-        console.log("solaC2[1]", solaC2[1])
-        console.log("solaC2[2]", solaC2[2])
-        expect(babyjub.F.toString(checkAC2[0])).to.eq(solaC2[1]);
-        expect(babyjub.F.toString(checkAC2[1])).to.eq(solaC2[2]);
+        let solAC2 = await contract.subCommitment(r2, babyjub.F.toString(aC1[0]), babyjub.F.toString(aC1[1]), r1, babyjub.F.toString(tC[0]), babyjub.F.toString(tC[1]))
+        expect(babyjub.F.toString(aC2[0])).to.eq(solAC2[1]);
+        expect(babyjub.F.toString(aC2[1])).to.eq(solAC2[2]);
+
+        // bob 7 + 5 (aC2) = 12
+        let r4 = await pedersen.generateRandom();
+        var bC1 = await pedersen.commitTo(H, r4, 7n);
+        var bC2 = await pedersen.add(bC1, tC);
 
         // bob's balance to go up by 5
         // bC1 + tC = bC2
@@ -119,6 +113,10 @@ describe("Init test", () => {
 
         expect(babyjub.F.eq(bC2[0], checkBC2[0])).to.eq(true);
         expect(babyjub.F.eq(bC2[1], checkBC2[1])).to.eq(true);
+
+        let solBC2 = await contract.addCommitment(r4, babyjub.F.toString(bC1[0]), babyjub.F.toString(bC1[1]), r1, babyjub.F.toString(tC[0]), babyjub.F.toString(tC[1]))
+        expect(babyjub.F.toString(bC2[0])).to.eq(solBC2[1]);
+        expect(babyjub.F.toString(bC2[1])).to.eq(solBC2[2]);
 
         // verify the commitment
         expect(await pedersen.verify(H, bC2, r4 + r1, 7n + 5n)).to.eq(true);
