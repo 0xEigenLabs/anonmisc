@@ -31,9 +31,8 @@ contract PedersenCommitmentBabyJub is BabyJub {
         internal
         view
         returns( uint256 _v3 )
-    {   
-        // R_ * 8 = nn   8 is the cofactor of Baby Jubjub
-        uint256 _p = R_;
+    {
+        uint256 _p = pp;
         assembly{
             _v3 := addmod(_v1,_v2,_p)
         }
@@ -44,10 +43,10 @@ contract PedersenCommitmentBabyJub is BabyJub {
         view
         returns( uint256 _v3 )
     {
-        uint256 _p = R_;
+        uint256 _p = pp;
         assembly{
             if lt( _v1 , _v2 ){
-                _v3 := sub( _p , sub( _v2 , _v1 ) )
+                _v3 := sub( _p , mod(sub( _v2 , _v1  ), _p))
             }
             if gt(_v1 , _v2) {
                 _v3 := mod( sub( _v1 , _v2 ) , _p )
