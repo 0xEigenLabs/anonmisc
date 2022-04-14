@@ -3,9 +3,9 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./EllipticCurve.sol";
-import "./BabyJub.sol";
+import "./Secp256k1.sol";
 
-contract PedersenCommitmentBabyJub is BabyJub {
+contract PedersenCommitmentSecp256k1 is Secp256k1 {
     using SafeMath for uint256;
 
     uint256 public H;
@@ -46,7 +46,7 @@ contract PedersenCommitmentBabyJub is BabyJub {
         uint256 _p = nn;
         assembly{
             if lt( _v1 , _v2 ){
-                _v3 := sub( _p , mod(sub( _v2 , _v1  ), _p))
+                _v3 := sub( _p , sub( _v2 , _v1 ) )
             }
             if gt(_v1 , _v2) {
                 _v3 := mod( sub( _v1 , _v2 ) , _p )
@@ -70,7 +70,7 @@ contract PedersenCommitmentBabyJub is BabyJub {
         view
         returns ( uint256 _x3 , uint256 _y3 )
     {
-        ( uint256 _x1 , uint256  _y1 ) = eMul( _r % nn , gx , gy );
+        ( uint256 _x1 , uint256  _y1 ) = eMul( _r , gx , gy );
         ( uint256 _x2 , uint256 _y2 ) = eMul( _v , _hx , _hy );
         ( _x3 , _y3 ) = eAdd( _x1 , _y1 , _x2 , _y2 );
     }

@@ -1,11 +1,11 @@
 import {expect} from "chai";
 import {buildBabyjub} from "circomlibjs";
-var pedersen = require('../lib/pedersen');
+var pedersen = require('../lib/pedersen_babyJubjub');
 
 let babyjub
 let H
 
-describe('pedersen babyjub', () => {
+describe('Baby Jubjub Pedersen Commitment Test of Typescript Version', () => {
     before(async () => {
         babyjub = await buildBabyjub();
         H = await pedersen.generateH();
