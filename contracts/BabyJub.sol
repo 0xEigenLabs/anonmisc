@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 /**
  * @dev Baby jubjub curve using extended twisted edwards coordinate points with compress and decompress functions
- * Based on: https://github.com/yondonfu/sol-baby-jubjub
+ * Based on: https://github.com/yondonfu/sol-baby-jubjub and https://eprint.iacr.org/2008/013.pdf
  */
 contract BabyJub {
     // Curve parameters
