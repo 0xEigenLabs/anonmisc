@@ -32,7 +32,7 @@ contract PedersenCommitmentBabyJub is BabyJub {
         view
         returns( uint256 _v3 )
     {
-        uint256 _p = pp;
+        uint256 _p = nn;
         assembly{
             _v3 := addmod(_v1,_v2,_p)
         }
@@ -43,7 +43,7 @@ contract PedersenCommitmentBabyJub is BabyJub {
         view
         returns( uint256 _v3 )
     {
-        uint256 _p = pp;
+        uint256 _p = nn;
         assembly{
             if lt( _v1 , _v2 ){
                 _v3 := sub( _p , mod(sub( _v2 , _v1  ), _p))
